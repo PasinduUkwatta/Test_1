@@ -25,11 +25,19 @@ class SignUp extends Component {
 
     submitHandler = e => {
         e.preventDefault()
-        this.props.history.push('/address')
+
         console.log(this.state)
         axios.post('/sign-up',this.state)
             .then(response => {
                 console.log(response)
+                if(response.data =="OKEY"){
+                    this.props.history.push('/address')
+                }
+                else{
+                    this.props.history.push('/sign-up')
+                    console.log("Enter Correct Password")
+                }
+
             })
             .catch(error => {
                 console.log(error)

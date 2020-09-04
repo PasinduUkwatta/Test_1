@@ -105,7 +105,7 @@ def sign_up():
         password = sign_up_details['password']
 
 
-        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
 
         # for custom mails use: '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
 
@@ -148,7 +148,7 @@ def sign_up():
                 val = (firstname, lastname, email, hashed_value)
                 mycursor.execute(query, val)
                 connection.commit()
-                return jsonify({'result': result})
+                return "OKEY"
             else:
                 print("Please Try Again")
                 return "Invalid Password"
