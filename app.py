@@ -5,6 +5,9 @@ from mysql.connector import Error
 import bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
+from flask_sqlalchemy import SQLAlchemy
+from flask_user import current_user, login_required, roles_required, UserManager, UserMixin
+from email_validator import validate_email, EmailNotValidError
 
 app = Flask(__name__)
 CORS(app)
@@ -42,7 +45,7 @@ def sign_in_get_all():
 
 @app.route("/sign-in-get", methods=['GET'])
 def sign_in_get():
-    if request.method=='GET':
+    if request.method == 'GET':
         user_details = request.form
         email = user_details['email']
         password = user_details['password']
@@ -94,7 +97,7 @@ def sign_in_get_hash():
     return jsonify({'results': results})
 
 
-@app.route('/sign-up', methods=['POST'])
+@app.route('/sign-up-get', methods=['POST'])
 def sign_up():
     result = [{'msg': 'success'}, {'stat': '200 ok'}]
     if request.method == 'POST':
@@ -104,17 +107,62 @@ def sign_up():
         email = sign_up_details['email']
         password = sign_up_details['password']
 
+        # check if someone already register with the email
+        user = Users.query.filter_by(email=email).first()
+        if not user:
 
-        regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
+            regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
 
-        # for custom mails use: '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
+            # for custom mails use: '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
 
-        # Define a function for
-        # for validating an Email
-        # pass the regular expression
-        # and the string in search() method
-        if (re.search(regex, email)):
-            print("Valid Email")
+            # Define a function for
+            # for validating an Email
+            # pass the regular expression
+            # and the string in search() method
+            if (re.search(regex, email)):
+                print("Valid Email")
+
+                l, u, p, d = 0, 0, 0, 0
+                s = password
+                if (len(s) >= 8):
+                    for i in s:
+
+                        # counting lowercase alphabets
+                        if (i.islower()):
+                            l += 1
+
+                            # counting uppercase alphabets
+                        if (i.isupper()):
+                            u += 1
+
+                            # counting digits
+                        if (i.isdigit()):
+                            d += 1
+
+                            # counting the mentioned special characters
+                        if (i == '@' or i == '$' or i == '_'):
+                            p += 1
+                if (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l + p + u + d == len(s)):
+                    print("Valid Password")
+
+                    hashed_value = generate_password_hash(password)
+
+                    connection = mysql.connector.connect(host="localhost", user="root", password="1234",
+                                                         database="sample_project_db")
+                    mycursor = connection.cursor()
+                    query = "INSERT INTO users(first_name,last_name,email, password) VALUES (%s,%s,%s,%s)"
+                    val = (firstname, lastname, email, hashed_value)
+                    mycursor.execute(query, val)
+                    connection.commit()
+                    return "OKEY"
+                else:
+                    print("Please Try Again")
+                    return "Invalid Password"
+
+
+            else:
+                print("Invalid Email")
+                return "Enter Valid Email"
 
             l, u, p, d = 0, 0, 0, 0
             s = password
@@ -148,80 +196,140 @@ def sign_up():
                 val = (firstname, lastname, email, hashed_value)
                 mycursor.execute(query, val)
                 connection.commit()
-                return "OKEY"
+                return jsonify({'result': result})
             else:
                 print("Please Try Again")
                 return "Invalid Password"
 
 
-        else:
-            print("Invalid Email")
-            return "Enter Valid Email"
+
+    else:
+        print("user already exists in the database")
+        return 'Please enter another email'
 
 
-
-
-
-        l, u, p, d = 0, 0, 0, 0
-        s = password
-        if (len(s) >= 8):
-            for i in s:
-
-                # counting lowercase alphabets
-                if (i.islower()):
-                    l += 1
-
-                    # counting uppercase alphabets
-                if (i.isupper()):
-                    u += 1
-
-                    # counting digits
-                if (i.isdigit()):
-                    d += 1
-
-                    # counting the mentioned special characters
-                if (i == '@' or i == '$' or i == '_'):
-                    p += 1
-        if (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l + p + u + d == len(s)):
-            print("Valid Password")
-
-            hashed_value = generate_password_hash(password)
-
-            connection = mysql.connector.connect(host="localhost", user="root", password="1234",
-                                                 database="sample_project_db")
-            mycursor = connection.cursor()
-            query = "INSERT INTO users(first_name,last_name,email, password) VALUES (%s,%s,%s,%s)"
-            val = (firstname, lastname, email, hashed_value)
-            mycursor.execute(query, val)
-            connection.commit()
-            return jsonify({'result': result})
-        else:
-            print("Please Try Again")
-            return "Invalid Password"
-
-
-
-
-
-
-@app.route("/sign-up-get", methods=['GET'])
+@app.route('/sign-up', methods=['POST'])
 def sign_up_get():
-    try:
-        connection = mysql.connector.connect(host='localhost', database='sample_project_db', user='root',
-                                             password='1234')
-        sql_select_Query = "select * from users"
-        cursor = connection.cursor()
-        cursor.execute(sql_select_Query)
-        records = cursor.fetchall()
-        return jsonify({'records': records})
+    result = [{'msg': 'success'}, {'stat': '200 ok'}]
+    if request.method == 'POST':
+        sign_up_details = request.get_json()
+        email = sign_up_details['email']
+        password = sign_up_details['password']
+        firstname = sign_up_details['firstname']
+        lastname = sign_up_details['lastname']
 
-    except Error as e:
-        print("Error reading data from MySQL table", e)
-    finally:
-        if (connection.is_connected()):
-            connection.close()
-            cursor.close()
-            print("MySQL connection is closed")
+        hashed_value = generate_password_hash(password)
+        connection = mysql.connector.connect(host="localhost", user="root", password="1234",
+                                             database="sample_project_db")
+        mycursor = connection.cursor()
+        sql = "SELECT email FROM users Where email=%s"
+        data_search = (email,)
+
+        mycursor.execute(sql, data_search)
+        results = mycursor.fetchall()
+        print(results)
+        if (results == []):
+            print("No email available")
+            regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
+
+            # for custom mails use: '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
+
+            # Define a function for
+            # for validating an Email
+            # pass the regular expression
+            # and the string in search() method
+            if (re.search(regex, email)):
+                print("Valid Email")
+
+                l, u, p, d = 0, 0, 0, 0
+                s = password
+                if (len(s) >= 8):
+                    for i in s:
+
+                        # counting lowercase alphabets
+                        if (i.islower()):
+                            l += 1
+
+                            # counting uppercase alphabets
+                        if (i.isupper()):
+                            u += 1
+
+                            # counting digits
+                        if (i.isdigit()):
+                            d += 1
+
+                            # counting the mentioned special characters
+                        if (i == '@' or i == '$' or i == '_'):
+                            p += 1
+                if (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l + p + u + d == len(s)):
+                    print("Valid Password")
+
+                    hashed_value = generate_password_hash(password)
+
+                    connection = mysql.connector.connect(host="localhost", user="root", password="1234",
+                                                         database="sample_project_db")
+                    mycursor = connection.cursor()
+                    query = "INSERT INTO users(first_name,last_name,email, password) VALUES (%s,%s,%s,%s)"
+                    val = (firstname, lastname, email, hashed_value)
+                    mycursor.execute(query, val)
+                    connection.commit()
+                    return "OKEY"
+                else:
+                    print("Please Try Again")
+                    return "Invalid Password"
+
+
+            else:
+                print("Invalid Email")
+                return "Enter Valid Email"
+
+            l, u, p, d = 0, 0, 0, 0
+            s = password
+            if (len(s) >= 8):
+                for i in s:
+
+                    # counting lowercase alphabets
+                    if (i.islower()):
+                        l += 1
+
+                        # counting uppercase alphabets
+                    if (i.isupper()):
+                        u += 1
+
+                        # counting digits
+                    if (i.isdigit()):
+                        d += 1
+
+                        # counting the mentioned special characters
+                    if (i == '@' or i == '$' or i == '_'):
+                        p += 1
+            if (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l + p + u + d == len(s)):
+                print("Valid Password")
+
+                hashed_value = generate_password_hash(password)
+
+                connection = mysql.connector.connect(host="localhost", user="root", password="1234",
+                                                     database="sample_project_db")
+                mycursor = connection.cursor()
+                query = "INSERT INTO users(first_name,last_name,email, password) VALUES (%s,%s,%s,%s)"
+                val = (firstname, lastname, email, hashed_value)
+                mycursor.execute(query, val)
+                connection.commit()
+                return jsonify({'result': result})
+            else:
+                print("Please Try Again")
+                return "Invalid Password"
+
+
+
+        else:
+            print("user already exists in the database")
+            return 'Please enter another email'
+
+
+
+    connection.commit()
+    return jsonify({'results': results})
 
 
 @app.route('/address', methods=['POST'])

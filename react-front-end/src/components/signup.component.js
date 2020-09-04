@@ -32,10 +32,12 @@ class SignUp extends Component {
                 console.log(response)
                 if(response.data =="OKEY"){
                     this.props.history.push('/address')
+                    console.log("Details saved into the database")
                 }
                 else{
                     this.props.history.push('/sign-up')
-                    console.log("Enter Correct Password")
+                    console.log("Please Try Again")
+
                 }
 
             })
