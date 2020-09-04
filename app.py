@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 from mysql.connector import Error
 import bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
+import re
 
 app = Flask(__name__)
 CORS(app)
@@ -102,6 +103,64 @@ def sign_up():
         lastname = sign_up_details['lastname']
         email = sign_up_details['email']
         password = sign_up_details['password']
+
+
+        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+
+        # for custom mails use: '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
+
+        # Define a function for
+        # for validating an Email
+        # pass the regular expression
+        # and the string in search() method
+        if (re.search(regex, email)):
+            print("Valid Email")
+
+            l, u, p, d = 0, 0, 0, 0
+            s = password
+            if (len(s) >= 8):
+                for i in s:
+
+                    # counting lowercase alphabets
+                    if (i.islower()):
+                        l += 1
+
+                        # counting uppercase alphabets
+                    if (i.isupper()):
+                        u += 1
+
+                        # counting digits
+                    if (i.isdigit()):
+                        d += 1
+
+                        # counting the mentioned special characters
+                    if (i == '@' or i == '$' or i == '_'):
+                        p += 1
+            if (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l + p + u + d == len(s)):
+                print("Valid Password")
+
+                hashed_value = generate_password_hash(password)
+
+                connection = mysql.connector.connect(host="localhost", user="root", password="1234",
+                                                     database="sample_project_db")
+                mycursor = connection.cursor()
+                query = "INSERT INTO users(first_name,last_name,email, password) VALUES (%s,%s,%s,%s)"
+                val = (firstname, lastname, email, hashed_value)
+                mycursor.execute(query, val)
+                connection.commit()
+                return jsonify({'result': result})
+            else:
+                print("Please Try Again")
+                return "Invalid Password"
+
+
+        else:
+            print("Invalid Email")
+            return "Enter Valid Email"
+
+
+
+
 
         l, u, p, d = 0, 0, 0, 0
         s = password
