@@ -116,7 +116,7 @@ class Address extends Component {
                 </div>
 
 
-                <button type="submit" className="btn btn-primary btn-block" action ="detail">Sign Up</button>
+                <button type="submit" className="btn btn-primary btn-block" action ="detail">Submit Address Details</button>
 
             </form>
         )

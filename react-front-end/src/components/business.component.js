@@ -92,7 +92,7 @@ class Business extends Component {
                     onChange={this.changeHandler}  />
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-block" action ="detail">Sign Up</button>
+                <button type="submit" className="btn btn-primary btn-block" action ="detail">Submit Business Details</button>
 
             </form>
         )

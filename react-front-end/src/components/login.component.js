@@ -70,7 +70,7 @@ export default class Login extends Component {
                 <button 
                 type="submit" 
                 className="btn btn-primary btn-block">
-                Submit
+                Sign In
                 </button>
                 
             </form>
