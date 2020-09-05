@@ -26,15 +26,56 @@ def sign_in():
         connection = mysql.connector.connect(host="localhost", user="root", password="1234",
                                              database="sample_project_db")
         mycursor = connection.cursor()
-        query = "INSERT INTO  sign_in(email, password) VALUES (%s,%s)"
-        val = (email, hashed_value)
-        mycursor.execute(query, val)
+        query = "SELECT * FROM  users "
+       
+        mycursor.execute(query)
         connection.commit()
         return jsonify({'result': result})
 
+@app.route('/sign-in-check', methods=['POST'])
+def sign_in_check():
+    
+    if request.method == 'POST':
+        sign_in_details = request.get_json()
+        email = sign_in_details['email']
+        password = sign_in_details['password']
+        
+       
 
-@app.route("/sign-in-get-all", methods=['GET'])
+    connection = mysql.connector.connect(host="localhost", user="root", password="1234", database="sample_project_db")
+    mycursor = connection.cursor()
+    sql = "SELECT password FROM users Where email=%s LIMIT 1 "
+
+    data_search = (email,)
+
+    mycursor.execute(sql, data_search)
+    results = mycursor.fetchone()[0]
+  
+
+    connection.commit()
+    result = check_password_hash(results, password)
+    
+    if (result):
+    	print("OKEY")
+    	return jsonify("user details are valid")
+
+    else:
+    	print("WRONG")
+    	return jsonify("user details are invalid")
+    
+   
+
+
+
+
+@app.route("/sign-in-get-all", methods=['POST'])
 def sign_in_get_all():
+    if request.method == 'POST':
+        user_details = request.form.get
+        email = user_details['email']
+        password = user_details['password']
+        print(user_details)
+
     connection = mysql.connector.connect(host="localhost", user="root", password="1234", database="sample_project_db")
     mycursor = connection.cursor()
     mycursor.execute("SELECT email,password FROM users")
@@ -43,9 +84,9 @@ def sign_in_get_all():
     return jsonify(results)
 
 
-@app.route("/sign-in-get", methods=['GET'])
+@app.route("/sign-in-get", methods=['POST'])
 def sign_in_get():
-    if request.method == 'GET':
+    if request.method == 'POST':
         user_details = request.form
         email = user_details['email']
         password = user_details['password']
@@ -83,6 +124,7 @@ def sign_in_get_hash():
     sign_in_get_details = request.get_json()
     email = sign_in_get_details['email']
     password = sign_in_get_details['password']
+    print(sign_in_get_details)
 
     connection = mysql.connector.connect(host="localhost", user="root", password="1234", database="sample_project_db")
     mycursor = connection.cursor()
@@ -91,10 +133,13 @@ def sign_in_get_hash():
     data_search = (email, password)
 
     mycursor.execute(sql, data_search)
-    results = mycursor.fetchall()
+    results = mycursor.fetchone()[0]
     print(results)
+
     connection.commit()
-    return jsonify({'results': results})
+    result = check_password_hash(results, password)
+    return str(result)
+    return jsonify({'results': result})
 
 
 @app.route('/sign-up-get', methods=['POST'])

@@ -23,10 +23,9 @@ export default class Login extends Component {
         e.preventDefault()
         this.props.history.push('/sign-up')
         console.log(this.state)
-        axios.get('/sign-in-get-without-hash',this.state)
+        axios.post('/sign-in-get-check',this.state)
             .then(response => {
-                var result = response.data
-                console.log(result)
+                console.log(response)
             })
             .catch(error => {
                 console.log(error)
