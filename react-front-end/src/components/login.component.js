@@ -22,7 +22,7 @@ export default class Login extends Component {
      submitHandler = e => {
         e.preventDefault()
         console.log(this.state)
-        axios.get('/sign-in-check',this.state,{
+        axios.post('/sign-in-check-2',this.state,{
             headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json'
@@ -30,8 +30,17 @@ export default class Login extends Component {
         })
             .then(response => {
                 console.log(response)
-                console.log("Welcome to the site")
-                this.props.history.push('/address')
+                
+                 if(response.data =="user details are valid"){
+                    console.log("Welcome to the site")
+                    this.props.history.push('/address')                    
+                }
+                else{
+                    this.props.history.push('/sign-up')
+                    console.log("Please Try Again")
+
+                }
+
             })
             .catch(error => {
                 console.log(error.response)

@@ -56,9 +56,32 @@ def sign_in_check():
     else:
     	print("WRONG")
     	return jsonify("user details are invalid")
-    
-   
+ 
 
+@app.route('/sign-in-check-2', methods=['POST'])
+def sign_in_check2():
+    
+    if request.method == 'POST':
+        sign_in_details = request.get_json(silent=True,force=True)
+        email = sign_in_details['email']
+        password = sign_in_details['password']
+   
+    connection = mysql.connector.connect(host="localhost", user="root", password="1234", database="sample_project_db")
+    mycursor = connection.cursor()
+    sql = "SELECT password FROM users Where email=%s LIMIT 1 "
+    data_search = (email,)
+    mycursor.execute(sql, data_search)
+    results = mycursor.fetchone()[0]
+    connection.commit()
+    result = check_password_hash(results, password)
+    
+    if (result):
+    	print("OKEY")
+    	return jsonify("user details are valid")
+
+    else:
+    	print("WRONG")
+    	return jsonify("user details are invalid")
 
 
 
