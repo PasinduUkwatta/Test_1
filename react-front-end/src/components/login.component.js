@@ -21,14 +21,23 @@ export default class Login extends Component {
 
      submitHandler = e => {
         e.preventDefault()
-        this.props.history.push('/sign-up')
         console.log(this.state)
-        axios.post('/sign-in-get-check',this.state)
+        axios.get('/sign-in-check',this.state,{
+            headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+        } 
+        })
             .then(response => {
                 console.log(response)
+                console.log("Welcome to the site")
+                this.props.history.push('/address')
             })
             .catch(error => {
-                console.log(error)
+                console.log(error.response)
+               
+                console.log("Please Try Again")
+                this.props.history.push('/sign-in')
             }
             
         )

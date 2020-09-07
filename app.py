@@ -32,26 +32,20 @@ def sign_in():
         connection.commit()
         return jsonify({'result': result})
 
-@app.route('/sign-in-check', methods=['POST'])
+@app.route('/sign-in-check', methods=['GET'])
 def sign_in_check():
     
-    if request.method == 'POST':
-        sign_in_details = request.get_json()
+    if request.method == 'GET':
+        sign_in_details = request.get_json(silent=True,force=True)
         email = sign_in_details['email']
         password = sign_in_details['password']
-        
-       
-
+   
     connection = mysql.connector.connect(host="localhost", user="root", password="1234", database="sample_project_db")
     mycursor = connection.cursor()
     sql = "SELECT password FROM users Where email=%s LIMIT 1 "
-
     data_search = (email,)
-
     mycursor.execute(sql, data_search)
     results = mycursor.fetchone()[0]
-  
-
     connection.commit()
     result = check_password_hash(results, password)
     
@@ -71,14 +65,14 @@ def sign_in_check():
 @app.route("/sign-in-get-all", methods=['POST'])
 def sign_in_get_all():
     if request.method == 'POST':
-        user_details = request.form.get
+        user_details = request.get_json()
         email = user_details['email']
         password = user_details['password']
         print(user_details)
 
     connection = mysql.connector.connect(host="localhost", user="root", password="1234", database="sample_project_db")
     mycursor = connection.cursor()
-    mycursor.execute("SELECT email,password FROM users")
+    mycursor.execute("SELECT * FROM users")
     results = mycursor.fetchall()
     connection.commit()
     return jsonify(results)
@@ -99,6 +93,7 @@ def sign_in_get():
     data_search = (email,)
 
     mycursor.execute(sql, data_search)
+
     results = mycursor.fetchone()[0]
     print(results)
 
@@ -142,115 +137,6 @@ def sign_in_get_hash():
     return jsonify({'results': result})
 
 
-@app.route('/sign-up-get', methods=['POST'])
-def sign_up():
-    result = [{'msg': 'success'}, {'stat': '200 ok'}]
-    if request.method == 'POST':
-        sign_up_details = request.get_json()
-        firstname = sign_up_details['firstname']
-        lastname = sign_up_details['lastname']
-        email = sign_up_details['email']
-        password = sign_up_details['password']
-
-        # check if someone already register with the email
-        user = Users.query.filter_by(email=email).first()
-        if not user:
-
-            regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
-
-            # for custom mails use: '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
-
-            # Define a function for
-            # for validating an Email
-            # pass the regular expression
-            # and the string in search() method
-            if (re.search(regex, email)):
-                print("Valid Email")
-
-                l, u, p, d = 0, 0, 0, 0
-                s = password
-                if (len(s) >= 8):
-                    for i in s:
-
-                        # counting lowercase alphabets
-                        if (i.islower()):
-                            l += 1
-
-                            # counting uppercase alphabets
-                        if (i.isupper()):
-                            u += 1
-
-                            # counting digits
-                        if (i.isdigit()):
-                            d += 1
-
-                            # counting the mentioned special characters
-                        if (i == '@' or i == '$' or i == '_'):
-                            p += 1
-                if (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l + p + u + d == len(s)):
-                    print("Valid Password")
-
-                    hashed_value = generate_password_hash(password)
-
-                    connection = mysql.connector.connect(host="localhost", user="root", password="1234",
-                                                         database="sample_project_db")
-                    mycursor = connection.cursor()
-                    query = "INSERT INTO users(first_name,last_name,email, password) VALUES (%s,%s,%s,%s)"
-                    val = (firstname, lastname, email, hashed_value)
-                    mycursor.execute(query, val)
-                    connection.commit()
-                    return "OKEY"
-                else:
-                    print("Please Try Again")
-                    return "Invalid Password"
-
-
-            else:
-                print("Invalid Email")
-                return "Enter Valid Email"
-
-            l, u, p, d = 0, 0, 0, 0
-            s = password
-            if (len(s) >= 8):
-                for i in s:
-
-                    # counting lowercase alphabets
-                    if (i.islower()):
-                        l += 1
-
-                        # counting uppercase alphabets
-                    if (i.isupper()):
-                        u += 1
-
-                        # counting digits
-                    if (i.isdigit()):
-                        d += 1
-
-                        # counting the mentioned special characters
-                    if (i == '@' or i == '$' or i == '_'):
-                        p += 1
-            if (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l + p + u + d == len(s)):
-                print("Valid Password")
-
-                hashed_value = generate_password_hash(password)
-
-                connection = mysql.connector.connect(host="localhost", user="root", password="1234",
-                                                     database="sample_project_db")
-                mycursor = connection.cursor()
-                query = "INSERT INTO users(first_name,last_name,email, password) VALUES (%s,%s,%s,%s)"
-                val = (firstname, lastname, email, hashed_value)
-                mycursor.execute(query, val)
-                connection.commit()
-                return jsonify({'result': result})
-            else:
-                print("Please Try Again")
-                return "Invalid Password"
-
-
-
-    else:
-        print("user already exists in the database")
-        return 'Please enter another email'
 
 
 @app.route('/sign-up', methods=['POST'])
@@ -457,19 +343,6 @@ def business_get():
             connection.close()
             cursor.close()
             print("MySQL connection is closed")
-
-
-@app.route('/login', methods=['POST'])
-def login():
-    user = get_user(request.form['username'])
-
-    if user.check_password(request.form['password']):
-        login_user(user)
-        app.logger.info('%s logged in successfully', user.username)
-        return redirect(url_for('index'))
-    else:
-        app.logger.info('%s failed to log in', user.username)
-        abort(401)
 
 
 if __name__ == "__main__":
