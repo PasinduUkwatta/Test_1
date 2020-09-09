@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios"
+import CustomizedTables from "./table.component"
 
 class PaymentDetails extends Component {
 
@@ -54,56 +55,18 @@ class PaymentDetails extends Component {
         const{paymenttype,paymentamount,paymentemail,paymentownername} = this.state
 
         return (
-            <form onSubmit={this.submitHandler} >
+            <div>
+            
                 <h3>Previous Payment Details </h3>
 
-                <div className="form-group">
-                    <label>Payment Type</label>
-                     <input 
-                    type="text" 
-                    name ="paymenttype"
-                    className="form-control" 
-                    placeholder="Enter Payment Type" 
-                    value={paymenttype} 
-                    onChange={this.changeHandler}  />
-                </div>
-
-                <div className="form-group">
-                    <label>Payment Amount</label>
-                     <input 
-                    type="text" 
-                    name ="paymentamount"
-                    className="form-control" 
-                    placeholder="Enter Payment Amount" 
-                    value={paymentamount} 
-                    onChange={this.changeHandler}  />
-                </div>
-
-                <div className="form-group">
-                    <label>Payment Email</label>
-                     <input 
-                    type="text" 
-                    name ="paymentemail"
-                    className="form-control" 
-                    placeholder="Enter Payment Email" 
-                    value={paymentemail} 
-                    onChange={this.changeHandler}  />
-                </div>
-
-                <div className="form-group">
-                    <label>Payment Owner Name</label>
-                     <input 
-                    type="text" 
-                    name ="paymentownername"
-                    className="form-control" 
-                    placeholder="Enter Payment Owner Name  " 
-                    value={paymentownername}
-                    onChange={this.changeHandler}  />
-                </div>
-
+               
+                <CustomizedTables/>
+                
+   
+                
                 <button type="submit" className="btn btn-primary btn-block" action ="detail">Submit Payment Details</button>
-
-            </form>
+            </div>
+            
         )
     }
 }
