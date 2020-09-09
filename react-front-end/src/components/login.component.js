@@ -31,13 +31,15 @@ export default class Login extends Component {
             .then(response => {
                 console.log(response)
                 
-                 if(response.data =="user details are valid"){
-                    console.log("Welcome to the site")
-                    this.props.history.push('/address')                    
-                }
-                else{
+                 if(response.data =="user details are invalid"){
                     this.props.history.push('/sign-up')
                     console.log("Please Try Again")
+                                       
+                }
+                else{
+                    
+                    console.log("Welcome to the site")
+                    this.props.history.push('/payment-details') 
 
                 }
 

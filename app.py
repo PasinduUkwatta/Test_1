@@ -24,38 +24,13 @@ def sign_in():
 
         hashed_value = generate_password_hash(password)
         connection = mysql.connector.connect(host="localhost", user="root", password="1234",
-                                             database="sample_project_db")
+                                             database="sample_project_test_db")
         mycursor = connection.cursor()
-        query = "SELECT * FROM  users "
+        query = "INSERT into sign_in(email,password) "
        
         mycursor.execute(query)
         connection.commit()
         return jsonify({'result': result})
-
-@app.route('/sign-in-check', methods=['GET'])
-def sign_in_check():
-    
-    if request.method == 'GET':
-        sign_in_details = request.get_json(silent=True,force=True)
-        email = sign_in_details['email']
-        password = sign_in_details['password']
-   
-    connection = mysql.connector.connect(host="localhost", user="root", password="1234", database="sample_project_db")
-    mycursor = connection.cursor()
-    sql = "SELECT password FROM users Where email=%s LIMIT 1 "
-    data_search = (email,)
-    mycursor.execute(sql, data_search)
-    results = mycursor.fetchone()[0]
-    connection.commit()
-    result = check_password_hash(results, password)
-    
-    if (result):
-    	print("OKEY")
-    	return jsonify("user details are valid")
-
-    else:
-    	print("WRONG")
-    	return jsonify("user details are invalid")
  
 
 @app.route('/sign-in-check-2', methods=['POST'])
@@ -77,7 +52,11 @@ def sign_in_check2():
     
     if (result):
     	print("OKEY")
-    	return jsonify("user details are valid")
+    	sql ="SELECT * FROM payment Where payment_email=%s "
+    	data_search = (email,)
+    	mycursor.execute(sql, data_search)
+    	results = mycursor.fetchall()
+    	return jsonify(results)
 
     else:
     	print("WRONG")
@@ -183,7 +162,7 @@ def sign_up_get():
         results = mycursor.fetchall()
         print(results)
         if (results == []):
-            print("No email available")
+            
             regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
 
             # for custom mails use: '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
@@ -306,6 +285,39 @@ def address():
         mycursor.execute(query, val)
         connection.commit()
         return jsonify({'result': result})
+
+
+@app.route('/payment', methods=['POST'])
+def payment():
+    result = [{'msg': 'success'}, {'stat': '200 ok'}]
+    if request.method == 'POST':
+        payment_details = request.get_json()
+        paymenttype = payment_details['paymenttype']
+        paymentamount = payment_details['paymentamount']
+        paymentemail = payment_details['paymentemail']
+        paymentownername = payment_details['paymentownername']
+        
+        
+
+        connection = mysql.connector.connect(host="localhost", user="root", password="1234",
+                                             database="sample_project_db")
+        mycursor = connection.cursor()
+
+        sql = "SELECT email FROM users Where email=%s"
+        data_search = (paymentemail,)
+
+        mycursor.execute(sql, data_search)
+        results = mycursor.fetchall()
+      
+        if(results==[]):
+        	return jsonify("Enter Valid email you Sign In")
+
+        else:
+        	query = "INSERT INTO  payment(payment_type,payment_amount,payment_email,payment_owner_name) VALUES (%s,%s,%s,%s)"
+        	val = (paymenttype,paymentamount, paymentemail, paymentownername)
+        	mycursor.execute(query, val)
+        	connection.commit()
+        	return jsonify("Payment Details successfully Entered Into the Database")
 
 
 @app.route("/address-get", methods=['GET'])

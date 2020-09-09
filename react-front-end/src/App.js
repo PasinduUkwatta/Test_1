@@ -7,7 +7,9 @@ import Login from "./components/login.component";
 import SignUp from "./components/signup.component";
 import Address from "./components/address.component";
 import Business from "./components/business.component";
-import HomePage from "./components/homepage.component"
+import HomePage from "./components/homepage.component";
+import Payment from "./components/payment.component";
+import PaymentDetails from "./components/paymentdetails.component";
 
 function App() {
   return (<Router>
@@ -35,6 +37,14 @@ function App() {
               <li className="nav-item">
                 <Link className="nav-link" to={"/business"}>Business</Link>
               </li>
+
+              <li className="nav-item">
+                <Link className="nav-link" to={"/payment"}>Payment</Link>
+              </li>
+
+              <li className="nav-item">
+                <Link className="nav-link" to={"/payment-details"}>Payment Details</Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -48,6 +58,8 @@ function App() {
             <Route path="/sign-up" component={SignUp} />
             <Route path="/address" component={Address} />
             <Route path="/business" component={Business} />
+            <Route path="/payment" component={Payment} />
+            <Route path="/payment-details" component={PaymentDetails} />
           </Switch>
         </div>
       </div>
