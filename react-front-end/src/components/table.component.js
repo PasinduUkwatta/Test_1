@@ -31,11 +31,11 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData(3,"Credit Card","1000","123@1234.com", "Pasindu"),
+  createData(2, 237, 9.0, 37, 4.3),
+  createData(6, 262, 16.0, 24, 6.0),
+  createData(4, 305, 3.7, 67, 4.3),
+  createData(5, 356, 16.0, 49, 3.9),
 ];
 
 const useStyles = makeStyles({

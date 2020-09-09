@@ -58,13 +58,14 @@ class PaymentDetails extends Component {
             <div>
             
                 <h3>Previous Payment Details </h3>
+               <div>
+               <CustomizedTables/>
+               </div>
+                
+                <div><br />
+                                <button type="submit" className="btn btn-primary btn-block" action ="detail">Submit Payment Details</button>
 
-               
-                <CustomizedTables/>
-                
-   
-                
-                <button type="submit" className="btn btn-primary btn-block" action ="detail">Submit Payment Details</button>
+                </div>
             </div>
             
         )

@@ -46,6 +46,13 @@ class Address extends Component {
         const{line1,line2, postalcode,city,state,country} = this.state
 
         return (
+            
+            <div>
+           
+            <br />
+            <br />
+            <br />
+            <br />
             <form onSubmit={this.submitHandler} >
                 <h3>Address Details</h3>
 
@@ -119,6 +126,10 @@ class Address extends Component {
                 <button type="submit" className="btn btn-primary btn-block" action ="detail">Submit Address Details</button>
 
             </form>
+            </div>
+           
+            
+            
         )
     }
 }
