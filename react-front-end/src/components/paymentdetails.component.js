@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios"
 import CustomizedTables from "./table.component"
-
+import Table from "./table.component.test"
 class PaymentDetails extends Component {
 
 
@@ -59,7 +59,8 @@ class PaymentDetails extends Component {
             
                 <h3>Previous Payment Details </h3>
                <div>
-               <CustomizedTables/>
+            <CustomizedTables/>
+               <Table />
                </div>
                 
                 <div><br />
