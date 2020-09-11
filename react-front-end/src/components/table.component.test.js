@@ -20,9 +20,7 @@ componentDidMount() {
  })
 }
 
-componentWillUnmount() {
-  this.serverRequest.abort();
-}
+
  
 render() {
  const contents = this.state.data.forEach(item => {

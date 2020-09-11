@@ -47,8 +47,11 @@ def sign_in_check2():
     data_search = (email,)
     mycursor.execute(sql, data_search)
     results = mycursor.fetchone()[0]
+    print(type(results))
+    print(results)
     connection.commit()
     result = check_password_hash(results, password)
+    print(result)
     
     if (result):
     	print("OKEY")
@@ -56,12 +59,14 @@ def sign_in_check2():
     	data_search = (email,)
     	mycursor.execute(sql, data_search)
     	results = mycursor.fetchall()
+       
     	return jsonify(results)
+        
 
     else:
     	print("WRONG")
     	return jsonify("user details are invalid")
-
+ 
 
 
 @app.route("/sign-in-get-all", methods=['POST'])

@@ -8,7 +8,8 @@ export default class Login extends Component {
 
         this.state ={
             email: '',
-            password: ''
+            password: '',
+            data:[]
         }
         this.changeHandler = this.changeHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
@@ -19,8 +20,10 @@ export default class Login extends Component {
         this.setState({[e.target.name]: e.target.value})
     }
 
+
      submitHandler = e => {
         e.preventDefault()
+       
         console.log(this.state)
         axios.post('/sign-in-check-2',this.state,{
             headers: {
@@ -31,11 +34,17 @@ export default class Login extends Component {
             .then(response => {
                 console.log(response)
                 
-                 if(response.data =="user details are invalid"){
+                if(response.data==[0]){
+                    this.props.history.push('/payment')
+                    console.log("User did not have any payment yet")
+                }
+
+                else if(response.data =="user details are invalid"){
                     this.props.history.push('/sign-up')
                     console.log("Please Try Again")
                                        
                 }
+                
                 else{
                     
                     console.log("Welcome to the site")

@@ -56,15 +56,17 @@ class PaymentDetails extends Component {
 
         return (
             <div>
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
             
                 <h3>Previous Payment Details </h3>
                <div>
             <CustomizedTables/>
-               <Table />
+              
                </div>
                 
                 <div><br />
-                                <button type="submit" className="btn btn-primary btn-block" action ="detail">Submit Payment Details</button>
+                                <button type="submit" className="btn btn-primary btn-block" action ="detail" onClick={()=>{this.props.history.push('/')}}>Okey </button>
 
                 </div>
             </div>
