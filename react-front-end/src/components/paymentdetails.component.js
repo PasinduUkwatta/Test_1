@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import axios from "axios"
 import CustomizedTables from "./table.component"
 import Table from "./table.component.test"
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Navbar from '../components/navbar/navbar.profile.component'
+
 class PaymentDetails extends Component {
 
 
@@ -14,7 +17,6 @@ class PaymentDetails extends Component {
             paymentamount:'',
             paymentemail:'',
             paymentownername:'',
-          
         }
         this.changeHandler = this.changeHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
@@ -56,12 +58,17 @@ class PaymentDetails extends Component {
 
         return (
             <div>
+            <Navbar/>
             <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
             <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
             
                 <h3>Previous Payment Details </h3>
                <div>
             <CustomizedTables/>
+         
+            console.log(response.data)
+
+           
               
                </div>
                 

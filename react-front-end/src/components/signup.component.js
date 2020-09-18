@@ -30,9 +30,12 @@ class SignUp extends Component {
         axios.post('/sign-up',this.state)
             .then(response => {
                 console.log(response)
-                if(response.data =="OKEY"){
-                    this.props.history.push('/address')
+                var res = response.data.substring(0, 4);
+                if(res =="OKEY"){
+                    this.props.history.push('/email-confirm')
                     console.log("Details saved into the database")
+                    console.log(response.data.substring(5,11))
+
                 }
                 else{
                     this.props.history.push('/sign-up')
@@ -101,7 +104,16 @@ class SignUp extends Component {
                     onChange={this.changeHandler}  />
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-block" action ="detail">Sign Up</button>
+                <button type="submit">
+                <div class="ui animated button" tabindex="5">
+                    <div class="visible content">Next</div>
+                    <div class="hidden content">
+                    <i class="right arrow icon"></i>
+                    </div>
+                    </div>
+                   
+
+                </button>
 
             </form>
         )

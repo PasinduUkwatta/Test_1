@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios"
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Navbar from '../components/navbar/navbar.profile.component'
+
 
 class Address extends Component {
 
@@ -49,11 +52,11 @@ class Address extends Component {
             
             <div>
            
-            <br />
-            <br />
+       
             <br />
             <br />
             <form onSubmit={this.submitHandler} >
+            <Navbar/>
                 <h3>Address Details</h3>
 
                 <div className="form-group">
@@ -120,12 +123,46 @@ class Address extends Component {
                     placeholder="Enter Country Name" 
                     value={country}
                     onChange={this.changeHandler}  />
+
+                    
+
+                    <div>
+                    <br />
+                    <br />
+                    <div>
+                    <button onClick={()=>{this.props.history.push('/sign-up')}}> 
+                    <div class="ui animated button" tabindex="5">
+                    <div class="visible content">Back</div>
+                    <div class="hidden content">
+                    <i class="left arrow icon"></i>
+                    </div>
+                    </div>
+                    </button>
+                    <span> </span>
+                
+
+                    <button>
+                    <div class="ui animated button" tabindex="5">
+                    <div class="visible content">Next</div>
+                    <div class="hidden content">
+                    <i class="right arrow icon"></i>
+                    </div>
+                    </div>
+
+                    </button>
+
+                    </div>
+                    
+
+                   
+                </div>
                 </div>
 
 
-                <button type="submit" className="btn btn-primary btn-block" action ="detail">Submit Address Details</button>
+                
 
             </form>
+
             </div>
            
             

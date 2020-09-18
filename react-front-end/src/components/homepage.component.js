@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
+import Navbar from '../components/navbar/navbar.profile.component'
 
 const HomePage = () => (
+
 <div>
+
     <h3>Welcome</h3>
 <Route render={({ history}) => (
     <button
@@ -25,6 +28,8 @@ const HomePage = () => (
       Sign -Up
     </button>
   )} />
+
+
 </div>
   
 )

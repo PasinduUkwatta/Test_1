@@ -12,7 +12,6 @@ export default class Login extends Component {
             data:[]
         }
         this.changeHandler = this.changeHandler.bind(this);
-        this.submitHandler = this.submitHandler.bind(this);
        
     }
 
@@ -21,11 +20,11 @@ export default class Login extends Component {
     }
 
 
-     submitHandler = e => {
+       submitHandler = e => {
         e.preventDefault()
        
-        console.log(this.state)
-        axios.post('/sign-in-check-2',this.state,{
+        console.log(this.state);
+        axios.post('/sign-in',this.state,{
             headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json'
@@ -33,8 +32,11 @@ export default class Login extends Component {
         })
             .then(response => {
                 console.log(response)
+                this.setState({data:response.data});
                 
-                if(response.data==[0]){
+               
+                
+                if(response.data==[]){
                     this.props.history.push('/payment')
                     console.log("User did not have any payment yet")
                 }
@@ -48,9 +50,10 @@ export default class Login extends Component {
                 else{
                     
                     console.log("Welcome to the site")
-                    this.props.history.push('/payment-details') 
+                    this.props.history.push('/profile') 
 
                 }
+                console.log(this.state.response); 
 
             })
             .catch(error => {
@@ -66,7 +69,7 @@ export default class Login extends Component {
   
 
     render() {
-        const{email, password} = this.state
+        const{email, password,data} = this.state
 
         return (
             <form onSubmit={this.submitHandler}  >

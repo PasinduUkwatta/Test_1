@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios"
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Navbar from '../components/navbar/navbar.profile.component'
 
 class Business extends Component {
 
@@ -45,6 +47,8 @@ class Business extends Component {
         const{businessname,businessownername,businessregno,contactno} = this.state
 
         return (
+            <div>
+            <Navbar/>
             <form onSubmit={this.submitHandler} >
                 <h3>Business Details</h3>
 
@@ -91,10 +95,30 @@ class Business extends Component {
                     value={contactno}
                     onChange={this.changeHandler}  />
                 </div>
+                <div>
+                    <button onClick={()=>{this.props.history.push('/address')}}> 
+                    <div class="ui animated button" tabindex="5">
+                    <div class="visible content">Back</div>
+                    <div class="hidden content">
+                    <i class="left arrow icon"></i>
+                    </div>
+                    </div>
+                    </button>
+                    <span> </span>
+                
+                    <button > 
+                    <div class="ui animated button" tabindex="5">
+                    <div class="visible content">Next</div>
+                    <div class="hidden content">
+                    <i class="right arrow icon"></i>
+                    </div>
+                    </div>
+                    </button>
+                </div>
 
-                <button type="submit" className="btn btn-primary btn-block" action ="detail">Submit Business Details</button>
-
+                
             </form>
+            </div>
         )
     }
 }
