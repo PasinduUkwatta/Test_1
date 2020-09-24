@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Route } from 'react-router-dom'
-import Navbar from '../components/navbar/navbar.profile.component'
+
 
 const HomePage = () => (
 

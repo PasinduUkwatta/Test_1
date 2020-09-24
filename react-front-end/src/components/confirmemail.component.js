@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios"
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Navbar from '../components/navbar/navbar.profile.component'
 
 class EmailConfirm extends Component {
@@ -32,6 +30,8 @@ class EmailConfirm extends Component {
 
   
             <form onSubmit={this.submitHandler} >
+            <h3>{this.props.valuesFromSignUp}</h3>
+
                 <h3>Confirm the Email</h3>
 
                   <div className="form-group">

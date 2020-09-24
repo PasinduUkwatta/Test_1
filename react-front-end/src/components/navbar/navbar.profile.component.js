@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default class Navbar extends Component{
   render(){
@@ -34,6 +34,10 @@ export default class Navbar extends Component{
 
               <li className="nav-item">
                 <Link className="nav-link" to={"/payment-details"}>Previous Payments</Link>
+              </li>
+
+              <li className="nav-item">
+                <Link className="nav-link" to={"/sign-out"}>Sign-Out</Link>
               </li>
             </ul>
           </div>

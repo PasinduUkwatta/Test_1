@@ -2,6 +2,10 @@ import React from 'react'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {createStore,combineReducers,applyMiddleware} from "redux"
+import { Provider } from "react-redux"
+import thunk from 'redux-thunk'
+import reducers from './reducers'
 
 import Login from "./components/login.component";
 import SignUp from "./components/signup.component";
@@ -12,9 +16,16 @@ import Payment from "./components/payment.component";
 import PaymentDetails from "./components/paymentdetails.component";
 import Profile from "./components/profile.component";
 import EmailConfirm from "./components/confirmemail.component";
+import SignOut from "./components/signout.component";
+
+
+const store =createStore(reducers,applyMiddleware(thunk))
 
 function App() {
-  return (<Router>
+  return (
+    <Provider store={store}>
+
+    <Router>
     <div className="App">
       
 
@@ -30,10 +41,13 @@ function App() {
             <Route path="/payment-details" component={PaymentDetails} />
             <Route path="/profile" component={Profile} />
             <Route path="/email-confirm" component={EmailConfirm} />
+            <Route path="/sign-out" component={SignOut} />
           </Switch>
+
         </div>
       </div>
     </div></Router>
+     </Provider>
   );
 }
 

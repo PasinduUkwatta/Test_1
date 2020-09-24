@@ -9,31 +9,35 @@ from email_validator import validate_email, EmailNotValidError
 import smtplib
 from email.message import EmailMessage
 import random
+from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_identity)
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 CORS(app)
 app.config['JSON_ADD_STATUS'] = True
 
-#Database Configurations
-HOST_NAME='localhost'
-USER_NAME='root'
-PASSWORD='1234'
-DATABASE='sample_project_db'
+# Database Configurations
+HOST_NAME = 'localhost'
+USER_NAME = 'root'
+PASSWORD = '1234'
+DATABASE = 'sample_project_db'
 
-#Email Configurations
-SENDER_EMAIL ="pasindu.reccelabs@gmail.com"
-SENDER_APP_PASSWORD ="yjiycrivbpzxfluw"
+# Email Configurations
+SENDER_EMAIL = "pasindu.reccelabs@gmail.com"
+SENDER_APP_PASSWORD = "yjiycrivbpzxfluw"
+
+# Setup the Flask-JWT-Extended extension
+app.config['JWT_SECRET_KEY'] = 'recce-labs'  # Change this!
+jwt = JWTManager(app)
 
 
 @app.route('/sign-in', methods=['POST'])
 def sign_in_check2():
-    
     if request.method == 'POST':
-        sign_in_details = request.get_json(silent=True,force=True)
+        sign_in_details = request.get_json(silent=True, force=True)
         email = sign_in_details['email']
         password = sign_in_details['password']
-   
+
     connection = mysql.connector.connect(host=HOST_NAME, user=USER_NAME, password=PASSWORD, database=DATABASE)
     mycursor = connection.cursor()
     sql = "SELECT password FROM users Where email=%s LIMIT 1 "
@@ -45,21 +49,24 @@ def sign_in_check2():
     connection.commit()
     result = bcrypt.check_password_hash(results, password)
     print(result)
-    
+
     if (result):
-    	print("OKEY")
-    	sql ="SELECT * FROM payment Where payment_email=%s "
-    	data_search = (email,)
-    	mycursor.execute(sql, data_search)
-    	results = mycursor.fetchall()
-       
-    	return jsonify(results)
-        
+        access_token = create_access_token(identity=email)
+        print(access_token)
+        print("OKEY")
+        # Identity can be any data that is json serializable
+        sql = "SELECT * FROM payment Where payment_email=%s "
+        data_search = (email,)
+        mycursor.execute(sql, data_search)
+        results = mycursor.fetchall()
+
+        return '{} {}'.format(results,access_token),200
+
 
     else:
-    	print("WRONG")
-    	return jsonify("user details are invalid")
- 
+        print("WRONG")
+        return jsonify("user details are invalid")
+
 
 @app.route('/sign-up', methods=['POST'])
 def sign_up_get():
@@ -148,7 +155,9 @@ def sign_up_get():
                     val = (firstname, lastname, sign_up_details['email'], hashed_value)
                     mycursor.execute(query, val)
                     connection.commit()
-                    return '{} {}'.format("OKEY",num1)
+                    access_token = create_access_token(identity=sign_up_details['email'])
+
+                    return '{} {} {}'.format("OKEY",num1,access_token)
                     
                 else:
                     print("Please Try Again")
