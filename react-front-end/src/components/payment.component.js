@@ -40,24 +40,7 @@ class Payment extends Component {
 
         })
 
-        // axios.post('/payment',this.state)
-        //     .then(response => {
-        //         console.log(response)
-        //          if(response.data ==="Payment Details successfully Entered Into the Database"){
-        //             this.props.history.push('/')
-        //             console.log("Thank you For the Payment")
-        //         }
-        //         else{
-        //             this.props.history.push('/payment')
-        //             console.log("Please Try Again with Valid Email")
-        //
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //     }
-        //
-        // )
+
 
         }
     

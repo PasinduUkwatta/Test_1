@@ -61,10 +61,7 @@ class EmailConfirm extends Component {
 
                 })
 
-            //confirmSignUp(userSignUp).then(res => {
-            //    this.props.history.push("/profile")
-            //    console.log("details saved")
-           // })
+
         }
         else{
             console.log("wrong code")

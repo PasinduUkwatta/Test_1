@@ -34,16 +34,7 @@ const rows = [
   createData(1,"Credit Card","1000","123@1234.com", "Pasindu"),
   createData(2, 237, 9.0, 37, 4.3),
   createData(3, 262, 16.0, 24, 6.0),
-  createData(4, 305, 3.7, 67, 4.3),
-  createData(5, 356, 16.0, 49, 3.9),
-  createData(6, 356, 16.0, 49, 3.9),
-  createData(7, 356, 16.0, 49, 3.9),
-  createData(8, 356, 16.0, 49, 3.9),
-  createData(9, 356, 16.0, 49, 3.9),
-  createData(10, 356, 16.0, 49, 3.9),
-  createData(11, 356, 16.0, 49, 3.9),
-  createData(12, 356, 16.0, 49, 3.9),
-  createData(13, 356, 16.0, 49, 3.9),
+
 ];
 
 const useStyles = makeStyles({

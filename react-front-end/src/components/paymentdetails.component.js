@@ -15,7 +15,7 @@ class PaymentDetails extends Component {
             paymentamount:'',
             paymentemail:'',
             paymentownername:'',
-            payments:''
+            paymentDetails:''
         }
         this.changeHandler = this.changeHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
@@ -27,22 +27,45 @@ class PaymentDetails extends Component {
     }
 
 
-    //   const userPayments = {
-    //     paymets: localStorage.getItem('userPayments')
-    //
-    //  }
-    //
-    //  let showPayments ={
-    //      paymentsData:userPayments.paymets,
-    // //     lastname:userSignUp.lastname,
-    // //     email:userSignUp.email,
-    // //     password:userSignUp.password,
-    // }
-    //
-    // console.log(showPayments)
+
+    componentDidMount(){
+        const userPayments = {
+            paymentDetails: localStorage.getItem('paymentDetails'),
+
+        }
+
+        let userPaymentDetails={
+            userPaymentDetails :userPayments.paymentDetails
+        }
+
+
+
+
+
+        console.log("Payments details to show")
+        console.log(userPaymentDetails.userPaymentDetails)
+
+
+
+
+    }
+
 
     submitHandler = e => {
         e.preventDefault()
+
+        const userPayments = {
+            payments: localStorage.getItem('userPayments'),
+
+        }
+
+        let userPaymentsDetails ={
+            payments:userPayments.payments
+        }
+
+        console.log("Payments details to show")
+        console.log(userPaymentsDetails)
+
         this.props.history.push('/')
         console.log(this.state)
         axios.post('/payment',this.state)
@@ -79,14 +102,21 @@ class PaymentDetails extends Component {
                <div>
             <CustomizedTables/>
          
-            console.log(response.data)
+
 
            
               
                </div>
                 
                 <div><br />
-                                <button type="submit" className="btn btn-primary btn-block" action ="detail" onClick={()=>{this.props.history.push('/')}}>Okey </button>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary btn-block"
+                                    action ="detail"
+                                    //onClick={()=>{this.props.history.push('/sign-out')}}
+                                    onClick={this.submitHandler}
+                                >Okey
+                                </button>
 
                 </div>
             </div>

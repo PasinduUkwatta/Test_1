@@ -62,6 +62,7 @@ def sign_in_check2():
         mycursor.execute(sql, data_search)
         results = mycursor.fetchall()
 
+
         return jsonify(results)
 
         #return '{} {}'.format(results,access_token),200

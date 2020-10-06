@@ -36,20 +36,6 @@ class SignUpForm extends Component{
         console.log(this.state)
 
 
-        // const newUser ={
-         //     firstname: this.state.firstname,
-         //     lastname: this.state.lastname,
-         //     email: this.state.email,
-         //     password: this.state.password,
-         // }
-         //
-         //
-         // register(newUser).then(res => {
-         //     this.props.history.push('/profile')
-         //     console.log("sign up suceesfully done")
-         // })
-    
-
 
        axios.post('/sign-up',this.state)
             .then(response => {

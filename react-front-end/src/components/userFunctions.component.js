@@ -11,7 +11,10 @@ export const login = loginUser =>{
         .then(responce =>{
             console.log(responce)
             console.log(responce.data)
-            localStorage.setItem('userPayments',responce.data)
+
+            localStorage.setItem("paymentDetails", JSON.stringify(responce.data));
+
+
             if(!responce.data.error){
 
                 axios.post('/jwt-generate',{
