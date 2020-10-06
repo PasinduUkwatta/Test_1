@@ -15,6 +15,7 @@ class PaymentDetails extends Component {
             paymentamount:'',
             paymentemail:'',
             paymentownername:'',
+            payments:''
         }
         this.changeHandler = this.changeHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
@@ -25,6 +26,21 @@ class PaymentDetails extends Component {
         this.setState({[e.target.name]: e.target.value})
     }
 
+
+    //   const userPayments = {
+    //     paymets: localStorage.getItem('userPayments')
+    //
+    //  }
+    //
+    //  let showPayments ={
+    //      paymentsData:userPayments.paymets,
+    // //     lastname:userSignUp.lastname,
+    // //     email:userSignUp.email,
+    // //     password:userSignUp.password,
+    // }
+    //
+    // console.log(showPayments)
+
     submitHandler = e => {
         e.preventDefault()
         this.props.history.push('/')
@@ -32,7 +48,7 @@ class PaymentDetails extends Component {
         axios.post('/payment',this.state)
             .then(response => {
                 console.log(response)
-                 if(response.data =="Payment Details successfully Entered Into the Database"){
+                 if(response.data ==="Payment Details successfully Entered Into the Database"){
                     this.props.history.push('/')
                     console.log("Thank you For the Payment")
                 }
@@ -52,7 +68,6 @@ class PaymentDetails extends Component {
     
    
     render() {
-        const{paymenttype,paymentamount,paymentemail,paymentownername} = this.state
 
         return (
             <div>

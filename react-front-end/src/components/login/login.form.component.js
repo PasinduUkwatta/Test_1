@@ -1,15 +1,22 @@
 import React, { Component } from "react";
-import axios from "axios"
-import {connect} from 'react-redux'
-import { Route , withRouter} from 'react-router-dom';
-import {fetchLogin} from "../../actions";
+import {  withRouter} from 'react-router-dom';
+import GoogleAuth from "../GoogleAuth";
+import {login} from "../userFunctions.component";
+
+
+const required = value => {
+    if (!value) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                This field is required!
+            </div>
+        );
+    }
+};
+
 
 class LoginForm extends Component{
-componentDidMount(){
 
-        this.props.fetchLogin()
-
-    }
 
 constructor(props) {
         super (props)
@@ -34,60 +41,103 @@ constructor(props) {
         e.preventDefault()
        
         console.log(this.state);
-        axios.post('/sign-in',this.state,{
-            headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-        } 
+
+        const loginUser ={
+            email: this.state.email,
+            password: this.state.password,
+            data: this.state.data
+        }
+        console.log(loginUser)
+
+        login(loginUser).then(res=>{
+            this.props.history.push('/profile')
         })
-            .then(response => {
-                console.log(response)
 
-                this.setState({data:response.data});
-                var responceData =this.state.data
+        // axios.post('/sign-in',this.state,{
+        //     headers: {
+        //     'Content-Type': 'application/json',
+        //     Accept: 'application/json'
+        // }
+        // })
+        //     .then(response => {
+        //         console.log(response)
+        //
+        //         this.setState({data:this.state.response.data});
+        //
+        //
+        //
+        //
+        //
+        //
+        //         //getting the jwt from the responce from the backend
+        //         //var token = response.data.substring(responceData.indexOf(']')+1, )
+        //         //console.log("Json Web Token :"+token)
+        //
+        //         //getting the payments data according to the user from the backend responce
+        //         //var userData =response.data.substring(0,responceData.indexOf(']'))
+        //         //console.log("Payments Data :"+userData)
+        //
+        //
+        //
+        //
+        //         if(response.data===[]){
+        //             this.props.history.push('/payment')
+        //             console.log("User did not have any payment yet")
+        //         }
+        //
+        //         else if(response.data ==="user details are invalid"){
+        //             this.props.history.push('/sign-up')
+        //             console.log("Please Try Again")
+        //
+        //         }
+        //
+        //         else{
+        //
+        //             console.log("Welcome to the site")
+        //             this.props.history.push({
+    	// 						pathname: '/profile',
+    	// 						state: { userState: this.state }
+        //             })
+        //
+        //
+        //
+        //             axios.post('/jwt-generate',this.state,{
+        //                 headers: {
+        //                     'Content-Type': 'application/json',
+        //                     Accept: 'application/json'
+        //                 }
+        //             })
+        //                 .then(response => {
+        //                     var accessTokenLogin =response.data
+        //                     console.log(accessTokenLogin)
+        //                     console.log("this is the responce from the login")
+        //
+        //                 })
+        //                 .catch(error => {
+        //                         console.log(error.response)
+        //
+        //                         console.log("Please Try Again")
+        //                         this.props.history.push('/sign-in')
+        //                     }
+        //
+        //                 )
+        //
+        //         }
+        //
+        //
+        //     })
+        //     .catch(error => {
+        //         console.log(error)
+        //
+        //         console.log("Please Try Again")
+        //         this.props.history.push('/sign-in')
+        //     }
+        //
+        // )
 
-                //getting the jwt from the responce from the backend
-                var token = response.data.substring(responceData.indexOf(']')+1, )
-                console.log("Json Web Token :"+token)
 
-                //getting the payments data according to the user from the backend responce
-                var userData =response.data.substring(0,responceData.indexOf(']'))
-                console.log("Payments Data :"+userData)
-                
-                
-               
-                
-                if(response.data==[]){
-                    this.props.history.push('/payment')
-                    console.log("User did not have any payment yet")
-                }
 
-                else if(response.data =="user details are invalid"){
-                    this.props.history.push('/sign-up')
-                    console.log("Please Try Again")
-                                       
-                }
-                
-                else{
-                    
-                    console.log("Welcome to the site")
-                    this.props.history.push({ 
-    							pathname: '/profile',
-    							state: { userState: this.state }
-}) 
 
-                }
-               
-
-            })
-            .catch(error => {
-                console.log(error.response)
-               
-                console.log("Please Try Again")
-                this.props.history.push('/sign-in')
-            }
-            
-        )
 
         }
   
@@ -113,7 +163,9 @@ constructor(props) {
                     className="form-control" 
                     placeholder="Enter email" 
                     value={email} 
-                    onChange={this.changeHandler}  />
+                    onChange={this.changeHandler}
+                    validations={[required]}
+                    />
                     
                 </div>
 
@@ -142,6 +194,16 @@ constructor(props) {
                 </button>
                 
             </form>
+                <br />
+
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                    <GoogleAuth />
+                </div>
+
 
 
 			</div>)
@@ -149,11 +211,11 @@ constructor(props) {
 
 }
 
-const mapStateToProps =(state) =>{
-    return{usersLogin :state.usersLogin}
-}
+//const mapStateToProps =(state) =>{
+ //   return{usersLogin :state.usersLogin}
+//}
 
-export default connect(null,{fetchLogin}) (withRouter(LoginForm))
+export default (withRouter(LoginForm))
 
 
 

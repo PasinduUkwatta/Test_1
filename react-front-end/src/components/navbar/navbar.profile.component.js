@@ -37,8 +37,14 @@ export default class Navbar extends Component{
               </li>
 
               <li className="nav-item">
+                <Link className="nav-link" to={"/credit-card"}>Credit Card</Link>
+              </li>
+
+              <li className="nav-item">
                 <Link className="nav-link" to={"/sign-out"}>Sign-Out</Link>
               </li>
+
+
             </ul>
           </div>
         </div>

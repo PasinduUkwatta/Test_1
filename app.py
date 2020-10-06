@@ -11,6 +11,7 @@ from email.message import EmailMessage
 import random
 from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_identity)
 
+
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 CORS(app)
@@ -51,16 +52,19 @@ def sign_in_check2():
     print(result)
 
     if (result):
-        access_token = create_access_token(identity=email)
-        print(access_token)
-        print("OKEY")
+        #access_token = create_access_token(identity=email)
+        #print(access_token)
+        #print("OKEY")
+
         # Identity can be any data that is json serializable
         sql = "SELECT * FROM payment Where payment_email=%s "
         data_search = (email,)
         mycursor.execute(sql, data_search)
         results = mycursor.fetchall()
 
-        return '{} {}'.format(results,access_token),200
+        return jsonify(results)
+
+        #return '{} {}'.format(results,access_token),200
 
 
     else:
@@ -73,10 +77,10 @@ def sign_up_get():
     result = [{'msg': 'success'}, {'stat': '200 ok'}]
     if request.method == 'POST':
         sign_up_details = request.get_json()
-        email = sign_up_details['email']
-        password = sign_up_details['password']
         firstname = sign_up_details['firstname']
         lastname = sign_up_details['lastname']
+        email = sign_up_details['email']
+        password = sign_up_details['password']
 
         hashed_value = bcrypt.generate_password_hash(password)
         connection = mysql.connector.connect(host=HOST_NAME, user=USER_NAME, password=PASSWORD,
@@ -88,7 +92,7 @@ def sign_up_get():
         mycursor.execute(sql, data_search)
         results = mycursor.fetchall()
         print(results)
-        if (results == []):
+        if not results:
             
             regex = '(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)'
 
@@ -134,6 +138,7 @@ def sign_up_get():
 
 
                     num1 = random.randrange(100000, 1000000)
+                    str_num1 =str(num1)
                     print("First random number of length 6 is", num1)
 
                     email.set_content('Enter this code to Confirm Your email Address,This is your Email Verification Code : '+str(num1))
@@ -148,16 +153,21 @@ def sign_up_get():
                         smtp.send_message(email)
                         print('all done')
 
-                    connection = mysql.connector.connect(host=HOST_NAME, user=USER_NAME, password=PASSWORD,
-                                                         database=DATABASE)
-                    mycursor = connection.cursor()
-                    query = "INSERT INTO users(first_name,last_name,email, password) VALUES (%s,%s,%s,%s)"
-                    val = (firstname, lastname, sign_up_details['email'], hashed_value)
-                    mycursor.execute(query, val)
-                    connection.commit()
-                    access_token = create_access_token(identity=sign_up_details['email'])
+                    #connection = mysql.connector.connect(host=HOST_NAME, user=USER_NAME, password=PASSWORD,
+                     #                                    database=DATABASE)
+                   # mycursor = connection.cursor()
+                    #query = "INSERT INTO users(first_name,last_name,email, password) VALUES (%s,%s,%s,%s)"
+                    #val = (firstname, lastname, sign_up_details['email'], hashed_value)
+                    #mycursor.execute(query, val)
+                    #connection.commit()
+                    #access_token = create_access_token(identity=sign_up_details['email'])
 
-                    return '{} {} {}'.format("OKEY",num1,access_token)
+                    #return jsonify('{message: OKEY,code:'+str(num1)+'}')
+                    return jsonify({
+                    "message": "OKEY",
+                    "code": str_num1
+                    })
+
                     
                 else:
                     print("Please Try Again")
@@ -255,7 +265,7 @@ def payment():
         mycursor.execute(sql, data_search)
         results = mycursor.fetchall()
       
-        if(results==[]):
+        if not results:
         	return jsonify("Enter Valid email you Sign In")
 
         else:
@@ -303,6 +313,36 @@ def confirm_details():
         mycursor.execute(query, val)
         connection.commit()
         return jsonify({'result': result})
+
+
+@app.route('/jwt-generate', methods=['POST'])
+def login():
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
+
+    email = request.json.get('email', None)
+    password = request.json.get('password', None)
+    if not email:
+        return jsonify({"msg": "Missing email parameter"}), 400
+    if not password:
+        return jsonify({"msg": "Missing password parameter"}), 400
+
+
+    # Identity can be any data that is json serializable
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token), 200
+
+
+# Protect a view with jwt_required, which requires a valid access token
+# in the request to access.
+@app.route('/protected', methods=['POST'])
+@jwt_required
+def protected():
+    # Access the identity of the current user with get_jwt_identity
+    #current_user = get_jwt_identity()
+    #return jsonify(logged_in_as=current_user), 200
+    return jsonify("Okey"), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)

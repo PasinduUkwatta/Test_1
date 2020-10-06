@@ -1,6 +1,6 @@
 import React, { Component } from "react";
+import { withRouter} from 'react-router-dom';
 import axios from "axios"
-import { Route , withRouter} from 'react-router-dom';
 
 class SignUpForm extends Component{
 
@@ -27,38 +27,69 @@ class SignUpForm extends Component{
     submitHandler = e => {
         e.preventDefault()
         console.log(this.state)
+
+        localStorage.setItem('firstname',this.state.firstname)
+        localStorage.setItem('lastname',this.state.lastname)
+        localStorage.setItem('email',this.state.email)
+        localStorage.setItem('password',this.state.password)
+
+        console.log(this.state)
+
+
+        // const newUser ={
+         //     firstname: this.state.firstname,
+         //     lastname: this.state.lastname,
+         //     email: this.state.email,
+         //     password: this.state.password,
+         // }
+         //
+         //
+         // register(newUser).then(res => {
+         //     this.props.history.push('/profile')
+         //     console.log("sign up suceesfully done")
+         // })
     
 
-        
-        axios.post('/sign-up',this.state)
+
+       axios.post('/sign-up',this.state)
             .then(response => {
                 console.log(response)
-                
-                //getting "OKEY" from the responce from the backend
-                var res = response.data.substring(0, 4);
-                if(res =="OKEY"){
+                localStorage.setItem('code',response.data.code)
+
+
+
+
+
+                if(response.data.message ==="OKEY"){
                     this.props.history.push('/email-confirm')
                     console.log("Details saved into the database")
 
+
+                    axios.post('/jwt-generate',{
+                            email :this.state.email,
+                            password :this.state.password,
+                        }
+                    )
+                        .then(response => {
+                            console.log(response)
+                            var accessTokenLogin =response.data.access_token
+
+                            localStorage.setItem('accessTokenLogin',accessTokenLogin)
+
+
+                        })
+
+
                     //getting the confirmation code from the backend
-                    console.log("conformation code :"+response.data.substring(5,11))
+                    console.log("conformation code :"+response.data.code)
 
-                    //getting the JWT from the backend responce
-                    console.log("Json Web Token :"+response.data.substring(12,))
 
-                }
-                else{
-                    this.props.history.push('/sign-up')
-                    console.log("Please Try Again")
 
                 }
+
 
             })
-            .catch(error => {
-                console.log(error)
-            }
-            
-        )
+
 
         }
 
@@ -102,13 +133,15 @@ class SignUpForm extends Component{
                     value={email} 
                     onChange={this.changeHandler}  />
                 </div>
-                <div class="ui form error">
- 
-                  <div class="ui error message">
-                    <div class="header">Action Forbidden</div>
-                    <p>You can only sign up for an account once with a given e-mail address.</p>
-                  </div>
-                  
+
+
+                <div className="ui warning message">
+                    <div className="header">One Email for One User</div>
+                    <ul className="list">
+                        <li>You can only sign up for an account once with a given e-mail address.</li>
+
+
+                    </ul>
                 </div>
 
                 <div className="form-group">
@@ -122,9 +155,9 @@ class SignUpForm extends Component{
                     onChange={this.changeHandler}  />
                 </div>
 
-                <div class="ui warning message">
-                <div class="header">Enter Correct Password with Requirement!</div>
-                <ul class="list">
+                <div className="ui warning message">
+                <div className="header">Enter Correct Password with Requirement!</div>
+                <ul className="list">
                 <li>Password should Contain at least 8 charactors</li>
                 <li>At Least one Capital Letter</li>
                 <li>At Least one Special charactor (@ , $ , _ )</li>
@@ -133,10 +166,10 @@ class SignUpForm extends Component{
                 </div>
 
                 <button type="submit">
-                <div class="ui animated button" tabindex="5">
-                    <div class="visible content">Next</div>
-                    <div class="hidden content">
-                    <i class="right arrow icon"></i>
+                <div className="ui animated button" tabIndex="5">
+                    <div className="visible content">Next</div>
+                    <div className="hidden content">
+                    <i className="right arrow icon"></i>
                     </div>
                     </div>
                    

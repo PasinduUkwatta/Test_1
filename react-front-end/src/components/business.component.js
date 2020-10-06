@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios"
 import Navbar from '../components/navbar/navbar.profile.component'
+import {business} from "./userFunctions.component";
 
 class Business extends Component {
 
@@ -27,20 +28,49 @@ class Business extends Component {
 
     submitHandler = e => {
         e.preventDefault()
-        this.props.history.push('/')
+
         console.log(this.state)
-        axios.post('/business',this.state)
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error)
-            }
-            
-        )
+
+        const userBusinessDetails ={
+            businessname:this.state.businessname,
+            businessownername:this.state.businessownername,
+            businessregno:this.state.businessregno,
+            contactno:this.state.contactno,
+        }
+
+        business(userBusinessDetails).then(res=>{
+            this.props.history.push('/sign-out')
+        })
+
+
+
 
         }
-    
+
+onButtonClickHandler = () => {
+
+          axios.post('/protected',this.state,{
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            var accessTokenLogin =response.data
+                            console.log(accessTokenLogin)
+                            console.log("this is the responce from the login")
+
+                        })
+                        .catch(error => {
+                                console.log(error.response)
+
+                                console.log("Please Try Again")
+                                this.props.history.push('/sign-in')
+                            }
+
+                        )
+                        this.props.history.push('/sign-out')
+                    }
    
     render() {
         const{businessname,businessownername,businessregno,contactno} = this.state
@@ -95,21 +125,22 @@ class Business extends Component {
                     onChange={this.changeHandler}  />
                 </div>
                 <div>
-                    <button onClick={()=>{this.props.history.push('/address')}}> 
-                    <div class="ui animated button" tabindex="5">
-                    <div class="visible content">Back</div>
-                    <div class="hidden content">
-                    <i class="left arrow icon"></i>
+                    <button 
+                    onClick={this.onButtonClickHandler}> 
+                    <div className="ui animated button" tabIndex="5">
+                    <div className="visible content">Back</div>
+                    <div className="hidden content">
+                    <i className="left arrow icon"></i>
                     </div>
                     </div>
                     </button>
                     <span> </span>
                 
                     <button > 
-                    <div class="ui animated button" tabindex="5">
-                    <div class="visible content">Next</div>
-                    <div class="hidden content">
-                    <i class="right arrow icon"></i>
+                    <div className="ui animated button" tabIndex="5">
+                    <div className="visible content">Next</div>
+                    <div className="hidden content">
+                    <i className="right arrow icon"></i>
                     </div>
                     </div>
                     </button>

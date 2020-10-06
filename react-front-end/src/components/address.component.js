@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios"
 import Navbar from '../components/navbar/navbar.profile.component'
+import {address} from "./userFunctions.component";
 
 
 class Address extends Component {
@@ -29,17 +29,22 @@ class Address extends Component {
 
     submitHandler = e => {
         e.preventDefault()
-        this.props.history.push('/business')
+
         console.log(this.state)
-        axios.post('/address',this.state)
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error)
-            }
-            
-        )
+
+        const userAddressDetails={
+            line1:this.state.line1,
+            line2 :this.state.line2,
+            postalcode:this.state.postalcode,
+            city:this.state.city,
+            state:this.state.state,
+            country:this.state.country,
+        }
+
+        address(userAddressDetails).then(res=>{
+
+
+        })
 
         }
     
@@ -130,10 +135,10 @@ class Address extends Component {
                     <br />
                     <div>
                     <button onClick={()=>{this.props.history.push('/sign-up')}}> 
-                    <div class="ui animated button" tabindex="5">
-                    <div class="visible content">Back</div>
-                    <div class="hidden content">
-                    <i class="left arrow icon"></i>
+                    <div className="ui animated button" tabIndex="5">
+                    <div className="visible content">Back</div>
+                    <div className="hidden content">
+                    <i className="left arrow icon"></i>
                     </div>
                     </div>
                     </button>
@@ -141,10 +146,10 @@ class Address extends Component {
                 
 
                     <button>
-                    <div class="ui animated button" tabindex="5">
-                    <div class="visible content">Next</div>
-                    <div class="hidden content">
-                    <i class="right arrow icon"></i>
+                    <div className="ui animated button" tabIndex="5">
+                    <div className="visible content">Next</div>
+                    <div className="hidden content">
+                    <i className="right arrow icon"></i>
                     </div>
                     </div>
 
