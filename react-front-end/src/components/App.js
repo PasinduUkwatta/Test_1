@@ -1,7 +1,7 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../App.css';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Login from "./login.component";
 import SignUp from "./signup.component";
@@ -18,6 +18,9 @@ import CreditCard  from "./creditcard.component";
 
 
 function App() {
+
+
+
   return (
 
 
@@ -27,7 +30,11 @@ function App() {
 
       <div className="auth-wrapper">
         <div className="auth-inner">
+
           <Switch>
+
+            <Route exact path='/' component={HomePage} />
+            <Route exact path='/' component={HomePage} />
             <Route exact path='/' component={HomePage} />
             <Route path="/sign-in" component={Login} />
             <Route path="/sign-up" component={SignUp} />
@@ -39,6 +46,8 @@ function App() {
             <Route path="/email-confirm" component={EmailConfirm} />
             <Route path="/sign-out" component={SignOut} />
             <Route path="/credit-card" component={CreditCard} />
+
+
           </Switch>
 
         </div>

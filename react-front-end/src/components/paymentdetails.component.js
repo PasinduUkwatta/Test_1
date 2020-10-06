@@ -28,26 +28,32 @@ class PaymentDetails extends Component {
 
 
 
-    componentDidMount(){
-        const userPayments = {
-            paymentDetails: localStorage.getItem('paymentDetails'),
+    componentDidMount() {
+        let auth = localStorage.getItem('accessTokenLogin');
+        console.log(auth)
+
+        if (auth === null) {
+            console.log("User Details is not Verified")
+            window.location = "/sign-in"
+            console.log("User Details is not Verified")
+        } else {
+
+
+            const userPayments = {
+                paymentDetails: localStorage.getItem('paymentDetails'),
+
+            }
+
+            let userPaymentDetails = {
+                userPaymentDetails: userPayments.paymentDetails
+            }
+
+
+            console.log("Payments details to show")
+            console.log(userPaymentDetails.userPaymentDetails)
+
 
         }
-
-        let userPaymentDetails={
-            userPaymentDetails :userPayments.paymentDetails
-        }
-
-
-
-
-
-        console.log("Payments details to show")
-        console.log(userPaymentDetails.userPaymentDetails)
-
-
-
-
     }
 
 

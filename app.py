@@ -45,11 +45,11 @@ def sign_in_check2():
     data_search = (email,)
     mycursor.execute(sql, data_search)
     results = mycursor.fetchone()[0]
-    print(type(results))
-    print(results)
+
+
     connection.commit()
     result = bcrypt.check_password_hash(results, password)
-    print(result)
+
 
     if (result):
         #access_token = create_access_token(identity=email)
