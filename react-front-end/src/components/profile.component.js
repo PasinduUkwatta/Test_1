@@ -5,7 +5,7 @@ import axios from 'axios'
 class Profile extends Component { 
     constructor(props){
       super (props)
-      console.log(this.props.userState)
+
 
 
 

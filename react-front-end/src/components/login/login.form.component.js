@@ -40,7 +40,7 @@ constructor(props) {
        submitHandler = e => {
         e.preventDefault()
        
-        console.log(this.state);
+
 
         const loginUser ={
             email: this.state.email,

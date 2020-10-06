@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios"
-import CustomizedTables from "./table.component"
 import Navbar from '../components/navbar/navbar.profile.component'
+import DataTable from "./DataTable.component";
 
 class PaymentDetails extends Component {
-
-
 
     constructor(props) {
         super (props)
@@ -27,34 +25,6 @@ class PaymentDetails extends Component {
     }
 
 
-
-    componentDidMount() {
-        let auth = localStorage.getItem('accessTokenLogin');
-        console.log(auth)
-
-        if (auth === null) {
-            console.log("User Details is not Verified")
-            window.location = "/sign-in"
-            console.log("User Details is not Verified")
-        } else {
-
-
-            const userPayments = {
-                paymentDetails: localStorage.getItem('paymentDetails'),
-
-            }
-
-            let userPaymentDetails = {
-                userPaymentDetails: userPayments.paymentDetails
-            }
-
-
-            console.log("Payments details to show")
-            console.log(userPaymentDetails.userPaymentDetails)
-
-
-        }
-    }
 
 
     submitHandler = e => {
@@ -101,12 +71,12 @@ class PaymentDetails extends Component {
         return (
             <div>
             <Navbar/>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <br/><br/>
             
                 <h3>Previous Payment Details </h3>
                <div>
-            <CustomizedTables/>
+
+            <DataTable/>
          
 
 

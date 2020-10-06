@@ -46,7 +46,7 @@ def sign_in_check2():
     mycursor.execute(sql, data_search)
     results = mycursor.fetchone()[0]
 
-
+    print(results)
     connection.commit()
     result = bcrypt.check_password_hash(results, password)
 
