@@ -45,6 +45,9 @@ def sign_in_check2():
     data_search = (email,)
     mycursor.execute(sql, data_search)
     results = mycursor.fetchone()[0]
+    if not results:
+        return jsonify("sign up")
+
 
     print(results)
     connection.commit()
@@ -57,13 +60,27 @@ def sign_in_check2():
         #print("OKEY")
 
         # Identity can be any data that is json serializable
-        sql = "SELECT * FROM payment Where payment_email=%s "
+        sql = "SELECT * FROM payment Where payment_email=%s ORDER BY payment_id DESC LIMIT 10"
         data_search = (email,)
         mycursor.execute(sql, data_search)
         results = mycursor.fetchall()
 
+        if (results ==[]):
+            return jsonify({
+                            "message": "empty array",
+                            "data":[[0, "0", "0", "0", "0"]]
+                                })
 
-        return jsonify(results)
+
+
+        else:
+            return jsonify(results)
+
+
+
+
+
+        #return jsonify(results)
 
         #return '{} {}'.format(results,access_token),200
 

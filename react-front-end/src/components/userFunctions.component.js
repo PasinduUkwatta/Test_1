@@ -10,10 +10,32 @@ export const login = loginUser =>{
         })
         .then(responce =>{
             console.log(responce)
+            console.log(responce.data)
+            console.log(responce.data.data)
+            console.log(responce.data.message)
+            console.log(responce.data)
+
+            console.log(typeof (responce.data))
+
+             var reponceSignIn=responce.data
+            console.log(reponceSignIn)
+
+            if(reponceSignIn.message=="empty array"){
+                console.log("empty object")
+                var emptyData =responce.data.data[0]
+                console.log(emptyData)
+                localStorage.setItem("paymentDetails", JSON.stringify(emptyData))
+            }
+
+            else{
+                console.log("object has values")
+                var obj  = localStorage.setItem("paymentDetails", JSON.stringify(responce.data));
+                console.log(obj)
+            }
 
 
 
-            localStorage.setItem("paymentDetails", JSON.stringify(responce.data));
+
 
 
 
@@ -29,6 +51,7 @@ export const login = loginUser =>{
                                         var accessTokenLogin =response.data.access_token
 
                                         localStorage.setItem('accessTokenLogin',accessTokenLogin)
+                                        window.location = "/profile"
 
 
                                     })

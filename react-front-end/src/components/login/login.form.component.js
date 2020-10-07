@@ -50,7 +50,7 @@ constructor(props) {
         console.log(loginUser)
 
         login(loginUser).then(res=>{
-            this.props.history.push('/profile')
+
         })
 
 

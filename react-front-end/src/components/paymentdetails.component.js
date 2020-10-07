@@ -71,20 +71,27 @@ class PaymentDetails extends Component {
         return (
             <div>
             <Navbar/>
-            <br/><br/>
-            
-                <h3>Previous Payment Details </h3>
-               <div>
-
-            <DataTable/>
-         
+            <div>
+                <br />
+                <br />
+            </div>
 
 
-           
+<div>
+
+<br />
+<br />
+
+    <h3>Previous Payment Details </h3>
+
+
+
+               <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} >
+    <DataTable/>
               
                </div>
                 
-                <div><br />
+                <div>
                                 <button
                                     type="submit"
                                     className="btn btn-primary btn-block"
@@ -95,6 +102,7 @@ class PaymentDetails extends Component {
                                 </button>
 
                 </div>
+</div>
             </div>
             
         )
